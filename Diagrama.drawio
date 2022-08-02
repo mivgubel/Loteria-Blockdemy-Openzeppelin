@@ -1,0 +1,63 @@
+<mxfile host="65bd71144e">
+    <diagram id="_FlkoltbU14S6FXqatqq" name="Page-1">
+        <mxGraphModel dx="1467" dy="1618" grid="1" gridSize="12" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" background="#424242" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="5" style="edgeStyle=none;html=1;exitX=1.111;exitY=0.586;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="87.99499999999989" y="401.02" as="sourcePoint"/>
+                        <mxPoint x="188" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="2" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.user;fillColor=#D2D3D3;gradientColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="36" y="348" width="49" height="82" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Frontend / Console line" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="360" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Loteria Smart Contract" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="410" y="360" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Obtener el numero random - chainLink VRF&amp;nbsp;" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="530" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="10">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="74" y="348" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="74" y="240"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" value="OpenZeppelin Defender" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;b&gt;&amp;nbsp; &amp;nbsp;Funcionamiento Propuesto para usar el&amp;nbsp; Defender de OpenZeppelin:&lt;/b&gt;&lt;br&gt;&lt;ol&gt;&lt;li&gt;&amp;nbsp;El contrato de loteria permitira la compra de un numero / ticket a cualquier usario y&amp;nbsp; guardara un registro del numero que compro cada usuario. Cuando se compre un ticket el sentinel puede enviar un correo al usuario que lo compro y al owner confirmando la compra.&lt;/li&gt;&lt;li&gt;la loteria se puede ejecutar cada 24 hrs por ejemplo y&amp;nbsp; podemos utilizar el autotask y el relay para realizar el sorte de modo automizado.&lt;/li&gt;&lt;li&gt;obtendremos el numero random usando el servicio de chainlink VRF, este numero se debe obtener cuando se ejecute el sorteo.&lt;/li&gt;&lt;li&gt;una vez que se tnga un ganador se mandara correo con sentinel al ganador y al owner.&lt;/li&gt;&lt;li&gt;resetear las variables par una nueva rifa.&lt;/li&gt;&lt;/ol&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="-120" width="1150" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="" style="endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1" target="6">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="480" y="530" as="sourcePoint"/>
+                        <mxPoint x="530" y="480" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="" style="endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="479.5" y="360" as="sourcePoint"/>
+                        <mxPoint x="479.5" y="270" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" value="&lt;span&gt;Sentinel - Envia correo al usuario.&lt;/span&gt;" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+                    <mxGeometry x="132" y="172" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="&lt;span&gt;&amp;nbsp; TAREAS A IMPLEMENTAR:&lt;br&gt;&lt;ol&gt;&lt;li&gt;&lt;span&gt;Desarrollar el contrato de Loteria. (Kev)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Implementar el VFR de chainlink. (Ricardo)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;implementar el uso del Defender: Admin, Relay, Autotask, Sentinel (Diego)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Desarrollar el Frontend o los scripts para ejecutar el contrato en la consola. (Mike)&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+                    <mxGeometry x="47" y="672" width="769" height="240" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

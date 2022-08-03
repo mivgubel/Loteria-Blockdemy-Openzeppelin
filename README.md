@@ -1,7 +1,7 @@
 # Projecto creado para el Bootcamp Blockdemy - Openzeppelin.
 
 #### Implementar un contrato de loteria que nos permita comprar un numero entre 1 y 100, cada numero solo se puede comprar una solo vez.
-2.- Registrar el los numeros que cada usuario compro.
+#### 2.- Registrar el los numeros que cada usuario compro.
 3.- Hacer la funcion que ejecutara la loteria, llamando al vrf de chainlink.
 4.- Cuando la loteria ya se ejecuto, resetear los valores de las variables para que se puedan volver a comprar los numeros en el siguiente sorteo.
 

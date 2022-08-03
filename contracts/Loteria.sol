@@ -1,15 +1,30 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
-contract Lottery {
-    address public owner; // the address of the person who deployed the contract
+// import openzeppelin contracts
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+// import chainlink VRF contract
+import "./VRFv2Consumer.sol";
+
+contract Lottery is VRFv2Consumer {
     address payable[] public players; // list of the players
     uint public lotteryId;
     mapping (uint => address payable) public lotteryHistory; // This is to track the winners
 
-    constructor() {
-        owner = msg.sender; // setting the address of the person who deployed the contract.
+    // call to VRFv2Consumer construct
+    constructor(address _vrfCoordinator, bytes32 _keyHash, uint64 _subscriptionId) VRFv2Consumer(_vrfCoordinator, _keyHash, _subscriptionId) {
+        
+        // 
+        // Use these values for rinkeby testnet
+        // _vrfCoordinator: 0x6168499c0cFfCaCD319c818142124B7A15E857ab
+        // _keyHash: 0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc
+        // _subscriptionId: 9795
+        // 
+        // more information at https://docs.chain.link/docs/vrf-contracts/
+        // 
+        
         lotteryId = 1; // starting lottery with id 1, then we're gonna increment it on pickWinner function.
     }
 
@@ -33,12 +48,35 @@ contract Lottery {
     }
 
     function getRandomNumber() public view returns (uint) {
-        return uint(keccak256(abi.encodePacked(owner, block.timestamp))); // this is a hash algorithm which is native in solidity, we need to change this by using chainlink https://docs.chain.link/docs/intermediates-tutorial/
+        return uint(keccak256(abi.encodePacked(owner(), block.timestamp))); // this is a hash algorithm which is native in solidity, we need to change this by using chainlink https://docs.chain.link/docs/intermediates-tutorial/
+    }
+
+    //  this is the callback that chainlink VRF calls after a random number is generated
+    //  chainlink vrf works like this, with callbacks, there is no other way
+    function fulfillRandomNumber(uint256 _randomNumber) internal pure override {
+
+        uint256 index = _randomNumber;
+
+        // index contain a random number
+        index;
+
+        // code
+        // ...
+        // ...
+        // code
+
     }
 
     function pickWinner() public onlyOwner {
-        // require(msg.sender == owner); // restrict the use of this function to the owner of the contract
+
         uint index = getRandomNumber() % players.length; // feel free to change this by using chainlink
+
+        // 
+        // use requestRandomNumber(_callbackGasLimit, _maxNumber) to request a random number to chainlik VRF
+        // _callbackGasLimit: is the gaslimit to run the fulfillRandomNumber callback. 100000 wei is ok.
+        // _maxNumber: _maxNumber = 100 => returns a number between 0 and 999
+        // 
+
         players[index].transfer(address(this).balance); // transfering the balance of thr current smart contract to the winner
 
         lotteryHistory[lotteryId] = players[index]; // tracking the winners
@@ -48,8 +86,4 @@ contract Lottery {
         players = new address payable[](0);
     }
 
-    modifier onlyOwner() { // reusable modifier 
-        require(msg.sender == owner); // restrict the use to the owner of the contract
-        _; // whatever other code is in the function this modifier is apply to, have that run after the require statement
-    }
 }

@@ -7,30 +7,30 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
 contract VRFv2Consumer is Ownable, VRFConsumerBaseV2 {
 
+  address private constant VRF_COORDINATOR = 0x6168499c0cFfCaCD319c818142124B7A15E857ab;
+  bytes32 private constant KEY_HASH = 0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc;
+  uint64 private constant SUBSCRIPTION_ID = 9795;
   uint16 private constant REQUEST_CONFIRMATIONS = 3;
+  uint32 private constant CALLBACK_GAS_LIMIT = 100000;
   uint32 private constant NUM_WORDS = 1;
 
   VRFCoordinatorV2Interface private coordinator;
-  bytes32 private keyHash;
-  uint64 private subscriptionId;
 
   uint256 private maxNumber = 10;
 
-  constructor(address _vrfCoordinator, bytes32 _keyHash, uint64 _subscriptionId) Ownable() VRFConsumerBaseV2(_vrfCoordinator) {
+  constructor() Ownable() VRFConsumerBaseV2(VRF_COORDINATOR) {
 
-    coordinator = VRFCoordinatorV2Interface(_vrfCoordinator);
-    keyHash = _keyHash;
-    subscriptionId = _subscriptionId;
+    coordinator = VRFCoordinatorV2Interface(VRF_COORDINATOR);
 
   }
 
-  function requestRandomNumber(uint32 _callbackGasLimit, uint256 _maxNumber) internal onlyOwner {
+  function requestRandomNumber(uint256 _maxNumber) internal onlyOwner {
 
     coordinator.requestRandomWords(
-      keyHash,
-      subscriptionId,
+      KEY_HASH,
+      SUBSCRIPTION_ID,
       REQUEST_CONFIRMATIONS,
-      _callbackGasLimit,
+      CALLBACK_GAS_LIMIT,
       NUM_WORDS
     );
 

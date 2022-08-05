@@ -51,10 +51,6 @@ contract Lottery is VRFv2Consumer {
 
     // function to request a random number from chainlink VRF
     function getRandomNumber() public onlyOwner {
-<<<<<<< HEAD
-=======
-
->>>>>>> f31d77a2ae57e41672f662a3b060fd75dc89d90b
         requestRandomNumber(players.length);
     }
 
@@ -74,13 +70,7 @@ contract Lottery is VRFv2Consumer {
     //  callback that chainlink VRF calls after a random number is generated
     function fulfillRandomNumber(uint256 _randomNumber) internal override {
         index = _randomNumber + 1;
-<<<<<<< HEAD
-    }
-=======
 
         emit RandomNumber();
-
     }
-
->>>>>>> f31d77a2ae57e41672f662a3b060fd75dc89d90b
 }

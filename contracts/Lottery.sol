@@ -14,6 +14,9 @@ contract Lottery is VRFv2Consumer {
     mapping (uint => address payable) public lotteryHistory; // This is to track the winners
     uint256 public index;
 
+    //Declare an RandomNumber Event
+    event RandomNumber();
+
     // call to VRFv2Consumer construct
     constructor() VRFv2Consumer() {
         
@@ -67,6 +70,8 @@ contract Lottery is VRFv2Consumer {
     function fulfillRandomNumber(uint256 _randomNumber) internal override {
 
         index = _randomNumber + 1;
+
+        emit RandomNumber();
 
     }
 

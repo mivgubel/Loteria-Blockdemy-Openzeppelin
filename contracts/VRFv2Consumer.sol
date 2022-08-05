@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract VRFv2Consumer is Ownable, VRFConsumerBaseV2 {
+contract VRFv2Consumer is VRFConsumerBaseV2 {
 
   address private constant VRF_COORDINATOR = 0x6168499c0cFfCaCD319c818142124B7A15E857ab;
   bytes32 private constant KEY_HASH = 0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc;
@@ -18,13 +17,13 @@ contract VRFv2Consumer is Ownable, VRFConsumerBaseV2 {
 
   uint256 private maxNumber = 10;
 
-  constructor() Ownable() VRFConsumerBaseV2(VRF_COORDINATOR) {
+  constructor() VRFConsumerBaseV2(VRF_COORDINATOR) {
 
     coordinator = VRFCoordinatorV2Interface(VRF_COORDINATOR);
 
   }
 
-  function requestRandomNumber(uint256 _maxNumber) internal onlyOwner {
+  function requestRandomNumber(uint256 _maxNumber) internal {
 
     coordinator.requestRandomWords(
       KEY_HASH,

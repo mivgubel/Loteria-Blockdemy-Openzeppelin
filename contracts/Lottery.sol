@@ -10,31 +10,36 @@ import "./VRFv2Consumer.sol";
 
 contract Lottery is VRFv2Consumer {
     address payable[] public players; // list of the players
-    uint public lotteryId;
-    mapping (uint => address payable) public lotteryHistory; // This is to track the winners
+    uint256 public lotteryId;
+    mapping(uint256 => address payable) public lotteryHistory; // This is to track the winners
     uint256 public index;
 
     // call to VRFv2Consumer construct
     constructor() VRFv2Consumer() {
-        
         lotteryId = 1; // starting lottery with id 1, then we're gonna increment it on pickWinner function.
         index = 0;
-
     }
 
-    function getWinnerByLottery(uint lottery) public view returns (address payable) {
+    function getWinnerByLottery(uint256 lottery)
+        public
+        view
+        returns (address payable)
+    {
         return lotteryHistory[lottery];
     }
 
-    function getBalance() public view returns (uint) { // getting lottery balance
+    function getBalance() public view returns (uint256) {
+        // getting lottery balance
         return address(this).balance;
     }
 
-    function getPlayers() public view returns (address payable[] memory) { // getting the players
+    function getPlayers() public view returns (address payable[] memory) {
+        // getting the players
         return players;
     }
 
-    function enter() public payable { // function for the persons that entered in our lottery
+    function enter() public payable {
+        // function for the persons that entered in our lottery
         require(msg.value > .01 ether); // this is the amount of ether that the person has to have to enter the lottery
 
         // adding address of player entering lottery to the players array
@@ -42,32 +47,25 @@ contract Lottery is VRFv2Consumer {
     }
 
     // function to request a random number from chainlink VRF
-    function getRandomNumber() public {
-
+    function getRandomNumber() public onlyOwner {
         requestRandomNumber(players.length);
-
     }
 
     function pickWinner() public onlyOwner {
-
         require(index > 0);
 
         players[index - 1].transfer(address(this).balance); // transfering the balance of thr current smart contract to the winner
 
         lotteryHistory[lotteryId] = players[index - 1]; // tracking the winners
         lotteryId++; // incrementing the lottery id after reset the players array and transfer the funds to the winner
-        
+
         // reset contract status because winner has been paid, that way we can play another round with new players
         players = new address payable[](0);
         index = 0;
-
     }
 
     //  callback that chainlink VRF calls after a random number is generated
     function fulfillRandomNumber(uint256 _randomNumber) internal override {
-
         index = _randomNumber + 1;
-
     }
-
 }

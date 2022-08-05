@@ -19,14 +19,23 @@ contract Lottery is Pausable, Ownable, VRFv2Consumer {
     event RandomNumber();
 
     // call to VRFv2Consumer construct
-    constructor() VRFv2Consumer() {
+    constructor() Pausable() Ownable() VRFv2Consumer() {
         lotteryId = 1; // starting lottery with id 1, then we're gonna increment it on pickWinner function.
         index = 0;
+    }
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
     }
 
     function getWinnerByLottery(uint256 lottery)
         public
         view
+        whenNotPaused
         returns (address payable)
     {
         return lotteryHistory[lottery];
@@ -47,7 +56,7 @@ contract Lottery is Pausable, Ownable, VRFv2Consumer {
         return players;
     }
 
-    function enter() public payable {
+    function enter() public payable whenNotPaused {
         // function for the persons that entered in our lottery
         require(msg.value > .01 ether); // this is the amount of ether that the person has to have to enter the lottery
 
@@ -56,11 +65,11 @@ contract Lottery is Pausable, Ownable, VRFv2Consumer {
     }
 
     // function to request a random number from chainlink VRF
-    function getRandomNumber() public onlyOwner {
+    function getRandomNumber() public whenNotPaused onlyOwner {
         requestRandomNumber(players.length);
     }
 
-    function pickWinner() public onlyOwner {
+    function pickWinner() public whenNotPaused onlyOwner {
         require(index > 0);
 
         players[index - 1].transfer(address(this).balance); // transfering the balance of thr current smart contract to the winner
@@ -74,7 +83,11 @@ contract Lottery is Pausable, Ownable, VRFv2Consumer {
     }
 
     //  callback that chainlink VRF calls after a random number is generated
-    function fulfillRandomNumber(uint256 _randomNumber) internal override {
+    function fulfillRandomNumber(uint256 _randomNumber)
+        internal
+        override
+        whenNotPaused
+    {
         index = _randomNumber + 1;
 
         emit RandomNumber();

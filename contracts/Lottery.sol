@@ -3,12 +3,13 @@
 pragma solidity ^0.8.9;
 
 // import openzeppelin contracts
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // import chainlink VRF contract
 import "./VRFv2Consumer.sol";
 
-contract Lottery is VRFv2Consumer {
+contract Lottery is Pausable, Ownable, VRFv2Consumer {
     address payable[] public players; // list of the players
     uint256 public lotteryId;
     mapping(uint256 => address payable) public lotteryHistory; // This is to track the winners
@@ -31,12 +32,17 @@ contract Lottery is VRFv2Consumer {
         return lotteryHistory[lottery];
     }
 
-    function getBalance() public view returns (uint256) {
+    function getBalance() public view whenNotPaused returns (uint256) {
         // getting lottery balance
         return address(this).balance;
     }
 
-    function getPlayers() public view returns (address payable[] memory) {
+    function getPlayers()
+        public
+        view
+        whenNotPaused
+        returns (address payable[] memory)
+    {
         // getting the players
         return players;
     }

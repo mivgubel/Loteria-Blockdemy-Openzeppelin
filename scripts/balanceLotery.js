@@ -17,18 +17,12 @@ async function main() {
 	const player2 = new hre.ethers.Wallet(process.env.PRIVATE_KEY1, provider);
 
 	const addresses = [player1.address, player2.address];
-	//const signers = [player1, player2];
+	const signers = [player1, player2];
 
-	console.log("Balances de las wallets:");
+	console.log("Balances Actualmente:");
 	await getBalances(provider, addresses);
-
 	const Lotery = new hre.ethers.Contract(contractAddress, contractAbi, player1);
 	console.log("Balance del contrato: ", hre.ethers.utils.formatEther(await Lotery.getBalance()), " ETH");
-
-	console.log("\nUniendose al sorteo...");
-	await Lotery.connect(player1).enter({ value: hre.ethers.utils.parseEther("0.011") });
-	await Lotery.connect(player2).enter({ value: hre.ethers.utils.parseEther("0.011") });
-	console.log("\n Listo!");
 }
 
 main().catch((error) => {

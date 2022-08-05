@@ -14,6 +14,9 @@ contract Lottery is VRFv2Consumer {
     mapping(uint256 => address payable) public lotteryHistory; // This is to track the winners
     uint256 public index;
 
+    //Declare an RandomNumber Event
+    event RandomNumber();
+
     // call to VRFv2Consumer construct
     constructor() VRFv2Consumer() {
         lotteryId = 1; // starting lottery with id 1, then we're gonna increment it on pickWinner function.
@@ -48,6 +51,10 @@ contract Lottery is VRFv2Consumer {
 
     // function to request a random number from chainlink VRF
     function getRandomNumber() public onlyOwner {
+<<<<<<< HEAD
+=======
+
+>>>>>>> f31d77a2ae57e41672f662a3b060fd75dc89d90b
         requestRandomNumber(players.length);
     }
 
@@ -67,5 +74,13 @@ contract Lottery is VRFv2Consumer {
     //  callback that chainlink VRF calls after a random number is generated
     function fulfillRandomNumber(uint256 _randomNumber) internal override {
         index = _randomNumber + 1;
+<<<<<<< HEAD
     }
+=======
+
+        emit RandomNumber();
+
+    }
+
+>>>>>>> f31d77a2ae57e41672f662a3b060fd75dc89d90b
 }

@@ -45,7 +45,7 @@ contract Lottery is VRFv2Consumer {
     }
 
     // function to request a random number from chainlink VRF
-    function getRandomNumber() public {
+    function getRandomNumber() public onlyOwner {
 
         requestRandomNumber(players.length);
 

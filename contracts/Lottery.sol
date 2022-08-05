@@ -3,12 +3,13 @@
 pragma solidity ^0.8.9;
 
 // import openzeppelin contracts
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // import chainlink VRF contract
 import "./VRFv2Consumer.sol";
 
-contract Lottery is VRFv2Consumer {
+contract Lottery is Pausable, Ownable, VRFv2Consumer {
     address payable[] public players; // list of the players
     uint public lotteryId;
     mapping (uint => address payable) public lotteryHistory; // This is to track the winners
@@ -18,26 +19,34 @@ contract Lottery is VRFv2Consumer {
     event RandomNumber();
 
     // call to VRFv2Consumer construct
-    constructor() VRFv2Consumer() {
+    constructor() Pausable() Ownable() VRFv2Consumer() {
         
         lotteryId = 1; // starting lottery with id 1, then we're gonna increment it on pickWinner function.
         index = 0;
 
     }
 
-    function getWinnerByLottery(uint lottery) public view returns (address payable) {
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    function getWinnerByLottery(uint lottery) public view whenNotPaused returns (address payable) {
         return lotteryHistory[lottery];
     }
 
-    function getBalance() public view returns (uint) { // getting lottery balance
+    function getBalance() public view whenNotPaused returns (uint) { // getting lottery balance
         return address(this).balance;
     }
 
-    function getPlayers() public view returns (address payable[] memory) { // getting the players
+    function getPlayers() public view whenNotPaused returns (address payable[] memory) { // getting the players
         return players;
     }
 
-    function enter() public payable { // function for the persons that entered in our lottery
+    function enter() public payable whenNotPaused { // function for the persons that entered in our lottery
         require(msg.value > .01 ether); // this is the amount of ether that the person has to have to enter the lottery
 
         // adding address of player entering lottery to the players array
@@ -45,13 +54,13 @@ contract Lottery is VRFv2Consumer {
     }
 
     // function to request a random number from chainlink VRF
-    function getRandomNumber() public onlyOwner {
+    function getRandomNumber() public whenNotPaused onlyOwner {
 
         requestRandomNumber(players.length);
 
     }
 
-    function pickWinner() public onlyOwner {
+    function pickWinner() public whenNotPaused onlyOwner {
 
         require(index > 0);
 
@@ -67,7 +76,7 @@ contract Lottery is VRFv2Consumer {
     }
 
     //  callback that chainlink VRF calls after a random number is generated
-    function fulfillRandomNumber(uint256 _randomNumber) internal override {
+    function fulfillRandomNumber(uint256 _randomNumber) internal override whenNotPaused {
 
         index = _randomNumber + 1;
 
